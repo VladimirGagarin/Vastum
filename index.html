@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AllegroVastum - Curated Music Collection | Personal Music Sanctuary</title>
+
+        <!-- Meta description for SEO -->
+        <meta name="description" content="AllegroVastum - A personal sanctuary where music transcends boundaries. Discover curated melodies that resonate deeply with the heart and soul.">
+  
+        <!-- Open Graph Meta Tags for social media sharing (Facebook, LinkedIn, etc.) -->
+        <meta property="og:title" content="AllegroVastum">
+        <meta property="og:description" content="AllegroVastum—a personal sanctuary where music transcends bounds of eternity. Discover a curated collection of melodies that resonate deeply with the heart and soul. Explore the music I cherish.">
+        <meta property="og:image" content="https://vladimirgagarin.github.io/Vastum/logo.png">
+        <meta property="og:url" content="">
+        <meta property="og:type" content="website">
+        
+        <!-- Twitter Card Meta Tags for Twitter sharing -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="AllegroVastum">
+        <meta name="twitter:description" content="AllegroVastum—a personal sanctuary where music transcends bounds of eternity. Discover a curated collection of melodies that resonate deeply with the heart and soul. Explore the music I cherish.">
+        <meta name="twitter:image" content="https://vladimirgagarin.github.io/Vastum/logo.png">
+        <meta name="twitter:url" content="">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self';"> -->
+
+        <!-- Link to stylesheet -->
+        <link rel="stylesheet" href="style.css">
+        <link rel="manifest" href="manifest.json">
+        <link rel="apple-touch-icon" href= "https://vladimirgagarin.github.io/Vastum/logo.png">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+        
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    </head>
+    
+    <body>
+
+        <header>
+            <div class="logo-n-title-header">
+                <div class="logo">
+                    <img src="logo.png" alt="AllegroVastum logo">
+                </div>
+                
+                <div class="title">
+                    <h1>AllegroVastum</h1>
+                </div>
+                                
+            </div>
+
+            <div class="humburger-menu" role="button" title="Click for menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <div class="navigations">
+            <ul>
+                <li data-match="Home">Home</li>
+                <li data-match="About">About</li>
+            </ul>
+        </div>
+
+        <div class="user-playlistform">
+            <div class="userp-content">
+                <div class="userp-header">
+                    <h2>Create you Playlist here</h2>
+                    <input type="text" title="Add Playlist name" placeholder="Playlist name here....">
+                </div>
+                <div class="list-of-floders">
+                    <h2>Select song folders to see more songs.</h2>
+                    <ul></ul>
+                </div>
+                <div class="songs-field">
+                    <ul></ul>
+                </div>
+
+                <div class="userp-actions">
+                    <button disabled>Done</button>
+                    <button>Exit</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-options">
+            <div class="refresh-options-content">
+                <div class="filter-options-header">
+                    <h2>Search filters for you.</h2>
+                    <button>Refresh list</button>
+                </div>
+                <div class="refresh-content-lists">
+                    <ul></ul>
+                </div>
+            </div>  
+        </div>
+
+        <main>
+            <section id="Home" data-color="#800200"  data-url="c853e444-d651-4742-a2fc-c6600a131a3d">
+                
+                <div class="music-headlines">
+
+                    <h2>today's recommendations ( <span></span> )</h2>
+
+                    <div class="filter-button" role="button">
+                        <span>filters</span>
+                    </div>
+
+                </div>
+
+                <div class="music-container">
+
+                    <ul></ul>
+
+                    <ul></ul>
+
+                    <div class="playlist-titles">
+                        <h2>Manage your Playlist</h2>
+                        <button>Create Playlists</button>
+                    </div>
+
+                </div>
+
+                <div class="mini-song-menu">
+
+                    <div class="min-controls">
+                        <button>&#9664;&#9664;</button>
+                        <button>&#9654;</button>
+                        <button>&#9654;&#9654;</button>
+                        <button title="Loop Song"><i class="fa-solid fa-repeat"></i></button>
+                    </div>
+
+                    <div class="song-title" role="button" title="See Song Content"></div>
+
+                    <div class="progress-menu-truck">
+                        <div class="progress-menu-bar"></div>
+                    </div>
+                </div>
+            </section>
+            <section id="Playlist" data-color="#2a5306" data-url="19a39f27-49eb-42ff-b5ea-4f38f5aea0c8">
+                <div class="quote-div"></div>
+                <div class="play-song-field"></div>
+
+                <div class="playlist-progress-truck">
+                    <div class="playlist-progres-bar"></div>
+                </div>
+
+                <div class="actions-icons play"><span>&#9654;</span></div>
+                <div class="actions-icons prev"><span>&#9664;&#9664;</span></div>
+                <div class="actions-icons next"><span>&#9654;&#9654;</span></div>
+                <div class="actions-icons loop"><span><i class="fa-solid fa-repeat"></i></span></div>
+                <div class="actions-icons like"><span>&hearts;</span></div>
+                <div class="actions-icons mute"><span>&#128266;</span></div>
+            </section>
+            <section id="About" data-color="#3f2e08" data-url="5c3381ff-0b32-45a8-b435-f2881f1f0628">
+                <h2>AllegroVastum: A Symphony of Timeless Melodies</h2>
+
+                <article id="song-moods" class="seo-article">
+                    <h3>Moods of Songs: Finding the Right Tune for Every Moment</h3>
+                    <p>Music reflects our emotions and can set the tone for any moment. Whether you're seeking joy, serenity, or inspiration, the playlists in AllegroVastum offer a spectrum of moods to suit your day. Let the melodies resonate with your heart and elevate your spirit.</p>
+                    
+                </article>
+
+                <article id="love-songs" class="seo-article">
+                    <h3>Heartfelt Love Songs: A Playlist for Romance</h3>
+                    <p>Experience the magic of love through a collection of timeless love songs. From classical serenades to modern romantic hits, these songs capture the essence of passion and connection. Perfect for date nights or moments of reflection, this playlist is a celebration of love in all its forms.</p>
+                </article>
+                
+                <article id="classic-disney" class="seo-article">
+                    <h3>Classic Disney Music: Relive the Magic</h3>
+                    <p>Step into the enchanting world of Disney with a selection of classic songs that have touched hearts across generations. Featuring unforgettable melodies from beloved movies like *The Little Mermaid*, *Beauty and the Beast*, and more, this collection is a joyful tribute to the magic of Disney music.</p>
+                </article>
+                
+                <article id="musical-oldies" class="seo-article">
+                    <h3>Musical Oldies: Nostalgic Tunes from Iconic Films</h3>
+                    <p>Rediscover the golden era of musicals with songs from timeless classics like *The Sound of Music* and *The Wizard of Oz*. These nostalgic tunes bring back memories of cinema's most magical moments, offering a journey through history's most beloved musicals.</p>
+                </article>
+                
+                <article id="classical-favorites" class="seo-article">
+                    <h3>Classical Music Favorites: Iconic Masterpieces</h3>
+                    <p>Celebrate the grandeur of classical music with works by legendary composers like Vivaldi, Mozart, and Beethoven. These masterpieces are perfect for relaxation, inspiration, or simply enjoying the beauty of orchestral music at its finest.</p>
+                </article>
+                
+                <article id="personal-picks" class="seo-article">
+                    <h3>Vlad Permaz's Top Picks: Songs That Inspire</h3>
+                    <p>Explore Vlad Permaz's personally curated playlist of his favorite songs. This collection includes heartfelt melodies, uplifting classics, and pieces that hold a special place in his heart, showcasing his deep love for music.</p>
+                    <div class="fav-list">
+                        <ul></ul>
+                    </div>
+                </article>
+
+                <article id="disclaimer" class="seo-article">
+                    <h3>Disclaimer: Respecting Music Rights</h3>
+                    <p>AllegroVastum and Vlad Permaz do not claim ownership of the songs featured on this website. All rights belong to the original creators and copyright holders. This platform exists solely for the enjoyment and appreciation of music. Songs are not used for commercial purposes and will be removed upon request if necessary.</p>
+                </article>
+
+                <div class="playbtn-control" role="button">
+                    <span>&#9654;</span>
+                </div>
+            </section>
+            <section id="QueuedSongs" data-color="#730e8c" data-url="cf62b83d-eca9-46e0-98c4-49b9fc061b20">
+                <h2></h2>
+                <p></p>
+                <div class="queued-songs-list"></div>
+                <div class="fallback-message">
+                    <h2>Seems We don't have Playlists for you!</h2>
+                    <p>Please help us by creating your own Playlist.</p>
+
+                    <div class="fallback-actions">
+                        <button>Create Playlist</button>
+                        <button>Home</button>
+                    </div>
+                </div>
+            </section>
+            <!-- <section id="" data-color="#14134b" data-url="50cc46a3-d348-4cd0-a103-bbed8abc3a09">
+                
+            </section> -->
+        </main>
+
+        <footer>
+            <button>Install AllegroVastum App</button>
+            <h2>&copy; 2025 AllegroVastum</h2>
+        </footer>
+
+        <div class="confirmation-play-overlay">
+            <div class="confirmation-content">
+                <div class="confirmation-text">
+                    <p></p>
+                </div>
+                <div class="confirmations-button">
+                    <button>Yeah!</button>
+                    <button>Nope!</button>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="playlist-platform">
+            <div class="playlist-platform-content">
+                <div class="playlist-platform-header">
+                    <h2>Playlist Platforms</h2>
+                    <div class="playlist-platform-actions">
+                        <button disabled>Done</button>
+                         <button>Exit</button>
+                    </div>
+                </div>
+
+                <div class="platforms-list">
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="movable-menu"></div>
+
+        <div class="auth-input">
+            <div class="auth-content">
+                <h2>Enter Password</h2>
+                <input type="text" title="Enter Password" placeholder="Password here...." autocomplete="off" type="password">
+                <div class="auth-actions">
+                    <button disabled>Submit</button>
+                    <button>Exit</button>
+            </div>
+        </div>
+        </div>
+
+        <div class="sharing-overlay">
+            <div class="sharing-content">
+                <h2>Share this song</h2>
+                <div class="sharing-icons"></div>
+                <div class="sharing-actions-icons">
+                    <button class="share-exit">Exit</button>
+                </div>
+        </div>
+        </div>
+
+        <div class="loading-overlay">
+            <div class="span">•</div>
+            <div class="span">•</div>
+            <div class="span">•</div>
+            <div class="span">•</div>
+            <div class="span">•</div>
+            <div class="span">•</div>
+        </div>
+
+        <div class="page-load">
+            <div class="loading-content">
+                <div class="logo">
+                    <img src="logo.png" alt="Your Logo" />
+                </div>
+                <div class="loading-text">
+                    <p>We’re gathering everything for you...</p>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <script src="script.js"></script> 
+        <script type="application/ld+json">
+            {
+              "@context": "http://schema.org",
+              "@type": "Website",
+              "name": "AllegroVastum",
+              "url": "https://yourwebsite.com",
+              "description": "A personal sanctuary for music lovers.",
+              "publisher": {
+                "@type": "Organization",
+                "name": "AllegroVastum"
+              }
+            }
+          </script>
+            
+    </body>
+</html>
