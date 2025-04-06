@@ -1,0 +1,81 @@
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Container for the audio list */
+  #audio-list {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px;
+    padding: 20px;
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style each audio item */
+  .audio-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #0b0a30;
+    color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .audio-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style for the audio player */
+  audio {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* Song details (name, artist, genre, mood) */
+  .song-details {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .song-details strong {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .song-details span {
+    color: #888;
+  }
+  
+  .song-details br {
+    margin-bottom: 5px;
+  }
+  
+  /* Add some spacing and rounded corners for better UX */
+  audio, .audio-item {
+    border-radius: 8px;
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    body{
+        background-color: #0b0a30;
+        color: #f9f9f9;
+    }
+
+    .song-details, .song-details strong, .song-details span{
+        color: #f9f9f9;
+    }
+    
+}
