@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AllegroVastum</title>
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; script-src 'self' https://ip-api.com/json;"> -->
+
+        <!-- Meta description for SEO -->
+        <meta name="description" content="AllegroVastum—a personal sanctuary where music transcends bounds of eternity. Discover a curated collection of melodies that resonate deeply with the heart and soul. Explore the music I cherish.">
+        
+        <!-- Meta keywords for SEO -->
+        <meta name="keywords" content="AllegroVastum, music sanctuary, curated melodies, music collection, personal playlist, emotional music, soul-stirring music, music I cherish, Youtube, Tiktok , facebook, Songa Play, Boomplay, Apple Music,">
+        
+        <!-- Open Graph Meta Tags for social media sharing (Facebook, LinkedIn, etc.) -->
+        <meta property="og:title" content="AllegroVastum">
+        <meta property="og:description" content="AllegroVastum—a personal sanctuary where music transcends bounds of eternity. Discover a curated collection of melodies that resonate deeply with the heart and soul. Explore the music I cherish.">
+        <meta property="og:image" content="https://vladimirgagarin.github.io/Vivaldi/logo.png">
+        <meta property="og:url" content="https://vivaldicantabile.com">
+        <meta property="og:type" content="website">
+        
+        <!-- Twitter Card Meta Tags for Twitter sharing -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="AllegroVastum">
+        <meta name="twitter:description" content="AllegroVastum—a personal sanctuary where music transcends bounds of eternity. Discover a curated collection of melodies that resonate deeply with the heart and soul. Explore the music I cherish.">
+        <meta name="twitter:image" content="https://vladimirgagarin.github.io/Vivaldi/logo.png">
+        <meta name="twitter:url" content="https://vivaldicantabile.com">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self';"> -->
+
+        <!-- Link to stylesheet -->
+        <link rel="stylesheet" href="style.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+        
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="../logo.png" type="image/x-icon">
+    </head>
+    <header>
+        <div class="logo">
+            <img src="../logo.png" alt="Image for logo" class="logo-image">
+            
+        </div>
+        <div class="logo-text">
+            <h1 class="logo-text">AllegroVastum</h1>
+            <p class="logo-subtext">A personal sanctuary where music transcends bounds of eternity.</p>
+        </div>
+    </header>
+
+    <body>
+       <main>
+
+        <div id="playerContainer">
+            <div class="player">
+                <div class="player-image">
+                    <img src="" alt="" id="player-img">
+                </div>
+                <div class="player-info">
+                    <h2 id="player-title">Song Title</h2>
+                    <p id="player-artist">Artist Name</p>
+                    <h3 id="player-album">Album Name</h3>
+                    <p id="player-genre">Genre</p>
+                    <p id="player-duration">00 : 00</p>
+                </div>
+
+                <div class="player-controls">
+                    <button id="play-btn" title="Play song">&#9654;</button>
+                    <button id="mute-btn" title="mute song"><i class="fa-solid fa-volume-up"></i></button>
+                    <button id="loop-btn" title="loop song"><i class="fa-solid fa-repeat"></i></button>
+                </div>
+
+                <div class="player-progress-truck">
+                    <div class="player-progress-bar"></div>
+                </div>
+            </div>  
+        </div>
+
+        <div class="home-buttons">
+            <button id="go-main">Go to Main Page</button>
+            <button id="listen-main">Listen song on Main Page</button>
+        </div>
+
+       </main>
+
+    <div class="fallback-actions">
+         <h2>Song Unavailable? Let's Find More!</h2>
+         <p>The song might not be available right now, but endless musical discoveries await on our main page!</p>
+
+         <button>Explore More Music</button>
+    </div>
+
+        <script src="share.js"></script>
+    </body>
+
+</html>
