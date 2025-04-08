@@ -1,24 +1,43 @@
- // Function to fetch the cached audio data (from audio.json)
- function fetchAudioData() {
+// Function to fetch the cached audio data (from audio.json)
+function fetchAudioData() {
     if ('caches' in window) {
-        caches.match('/audio.json').then(function(response) {
+        caches.match('./audio.json').then(function(response) {
             if (!response) {
                 console.log("No cached audio data available.");
+                showNoAudioFallback();  // Show fallback message or placeholder
                 return;
             }
             response.json().then(function(data) {
-                displayAudioFiles(data); // Display cached audio files
+                if (data && data.length > 0) {
+                    displayAudioFiles(data); // Display cached audio files
+                } else {
+                    console.log("No audio data available.");
+                    showNoAudioFallback();  // Show fallback message or placeholder
+                }
             });
         }).catch(function(error) {
             console.error("Error fetching audio data:", error);
+            showNoAudioFallback();  // Show fallback message or placeholder
         });
     }
+}
+
+// Function to display a message or fallback UI when no audio is available
+function showNoAudioFallback() {
+    const audioListContainer = document.getElementById('audio-list');
+    const noAudioMessage = document.createElement('div');
+    noAudioMessage.classList.add('no-audio-message');
+    noAudioMessage.innerHTML = `<p>No audio files available. Please check back later.</p>`;
+    audioListContainer.appendChild(noAudioMessage);
 }
 
 // Function to display the audio files and create a player for each
 function displayAudioFiles(audioData) {
     const audioListContainer = document.getElementById('audio-list');
     
+    // Clear previous content if any
+    audioListContainer.innerHTML = '';
+
     // Loop through each audio data entry and create a player
     audioData.forEach(function(audio) {
         const audioElement = document.createElement('div');
