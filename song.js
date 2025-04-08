@@ -1565,7 +1565,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currentAudioPlaying.isPlaying = false;
             updatePlaybuttons(false);
             toggleClassList(loadingoverlay, "active", true);
-            
+
             const allSongEl = songsContainer.querySelectorAll('li');
                 if(songFromUrl && songFromUrl.index){
                     const ind = songFromUrl.index;
@@ -1603,11 +1603,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const allSongEl = songsContainer.querySelectorAll('li');
                 if(songFromUrl && songFromUrl.index){
                     const ind = songFromUrl.index;
-
-                    if(ind === 0){
-                        toggleNextorPrev (ldir);
-                    }
-
                     if(ind < allSongEl.length) {
                         toggleNextorPrev(rdir);
                     }
