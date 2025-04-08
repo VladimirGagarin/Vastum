@@ -315,7 +315,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 aBoutPlayBtn.innerHTML = currentAudioPlaying.isPlaying ? "&#10074;&#10074;" : "&#9654;"
                 count++;
-                console.log(count);
                 if(count > 10){
                     clearInterval(intId);
                 }
@@ -429,7 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function saveToLocalStorage(arr, arrname) {
-        console.log("Saving to localStorage:", arrname, arr);
+        
         localStorage.setItem(arrname, JSON.stringify(arr));
     }
     
@@ -506,6 +505,42 @@ document.addEventListener("DOMContentLoaded", () => {
         // Close menu when clicking outside
         document.addEventListener("click", () => toggleClassList(movableMenuDiv , "active", false), { once: true });
     }
+
+    // Check if the user is offline and handle it
+    function handleOffline() {
+        // If currentAudio is playing, pause it and save the state
+        if (currentAudio && currentAudio.isPlaying) {
+            currentAudio.pause();
+            wasAudioPlaying = true;  // Save the fact that it was playing
+            currentAudio.isPlaying = false;
+        }
+
+        // Redirect to offline page
+        window.location.href = 'offline/';
+    }
+
+    // Check when the user goes back online
+    function handleOnline() {
+        // If we were playing audio before going offline, resume it
+        if (wasAudioPlaying && currentAudio) {
+            currentAudio.play();
+            currentAudio.isPlaying = true;
+            wasAudioPlaying = false;  // Reset the state
+        }
+    }
+
+    // Listen for the online/offline events
+    window.addEventListener('offline', handleOffline);
+    window.addEventListener('online', handleOnline);
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js').then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        }).catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+      }
+      
     
     const getAlbumImage = (song) => {
         const songGenre = song.songGenre;
@@ -994,7 +1029,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             allPlayLists.unshift(LikedSongsPlaylist); // Add at the beginning
 
-            console.log(LikedSongsPlaylist);
+            
         }
         
     
@@ -1230,7 +1265,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             authInput.oninput = () => {
                 const value = authInput.value.trim();
-                console.log("Auth Input Value:", value); // Debugging
                 authDone.disabled = value.length === 0;
             };
             
@@ -1388,7 +1422,7 @@ document.addEventListener("DOMContentLoaded", () => {
              
          newLi.setAttribute("data-playlist-label", p.pid);
 
-         console.log('Playlist pImg:', p.pImg); // Debugging log
+         
 
          
          const playlistImg = p.pImg || 'logo.png';
@@ -1430,7 +1464,7 @@ document.addEventListener("DOMContentLoaded", () => {
              
          newLi.onclick = () => {
 
-            console.log('Clicked playlist:', p);  // Check if 'p' is defined
+           
             if (!p) {
                 console.error('Playlist object is undefined!');
                 return;  // Exit early if 'p' is undefined
@@ -1915,7 +1949,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if(currentIndex < allSongEl.length) {
                 const sid = allSongEl[currentIndex].getAttribute("data-song-label");
                 const index = currentIndex + 1;
-                console.log(index);
                 getCurrentSong(sid,index)
             }
         }
@@ -1982,8 +2015,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if(allSongs.length > 0) {
             toggleClassList(defaultdiv, "active", false);
         }
-
-        console.log('Playlist Object:', p);
 
 
         allSongs.forEach((s, i)=> renderPlaylistSongs(s, i));
@@ -2190,7 +2221,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentSongPlaying.audio.currentTime = currentSongPlaying.pttime.ptime;
             currentSongPlaying.audio.muted = false;
             
-            console.log("stalled");
             upadatePlaylistPlayBtn(playBtn,  currentSongPlaying.isPlaying);
             toggleClassList(loadingoverlay, "active", true);
         });
@@ -2274,12 +2304,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function goNextSong(dir){
-        console.log("going", dir);
+        
 
         let currentIndex = playlistFromUrl.number;
         const allsongs =  queuedContainer.querySelectorAll('.queued-songs-list-item');
 
-        console.log(allsongs.length);
+       
 
         if(dir === "forward"){
             if(currentIndex < allsongs.length){
@@ -2351,7 +2381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             albSpan.onclick = () => {
                 const songsWithSameAlbum = mysongs.filter(s => s.songGenre === alb.albumName);
-                console.log(songsWithSameAlbum);
+                
                 const shuffledSongAlbum = shuffleArray(songsWithSameAlbum);
 
                 songBatches = [...shuffledSongAlbum.map(s => s.songId)];
