@@ -1564,6 +1564,20 @@ document.addEventListener("DOMContentLoaded", () => {
         currentAudioPlaying.audio.addEventListener('error', () => {
             currentAudioPlaying.isPlaying = false;
             updatePlaybuttons(false);
+            toggleClassList(loadingoverlay, "active", true);
+            
+            const allSongEl = songsContainer.querySelectorAll('li');
+                if(songFromUrl && songFromUrl.index){
+                    const ind = songFromUrl.index;
+
+                    if(ind === 0){
+                        toggleNextorPrev (ldir);
+                    }
+
+                    if(ind < allSongEl.length) {
+                        toggleNextorPrev(rdir);
+                    }
+                }
         });
 
         currentAudioPlaying.audio.addEventListener('waiting', () => {
