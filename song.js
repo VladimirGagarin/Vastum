@@ -115,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
         pid: null,
     }
 
+    let wasAudioPlaying = false;
+
     let songBatches = JSON.parse(sessionStorage.getItem('songBatches') || '[]');
     let playlistBatches = JSON.parse(sessionStorage.getItem('playlistBatches') || '[]');
     let likedSongs = JSON.parse(localStorage.getItem("LikedSongs") || "[]");
@@ -298,6 +300,8 @@ document.addEventListener("DOMContentLoaded", () => {
         navLinks.forEach(nav => toggleClassList(nav, "active", false));
 
         const sectionId = currentSection.id;
+
+        document.title = "AllegroVastum - Curated Music Collection | Personal Music Sanctuary";
 
         navLinks.forEach(nav => {
             const navId = nav.getAttribute('data-match');
@@ -509,8 +513,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check if the user is offline and handle it
     function handleOffline() {
         // If currentAudio is playing, pause it and save the state
-        if (currentAudio && currentAudio.isPlaying) {
-            currentAudio.pause();
+        if (currentAudioPlaying && currentAudioPlaying.audio && currentAudioPlaying.isPlaying) {
+            currentAudioPlaying.audio.pause();
             wasAudioPlaying = true;  // Save the fact that it was playing
             currentAudio.isPlaying = false;
         }
@@ -522,11 +526,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check when the user goes back online
     function handleOnline() {
         // If we were playing audio before going offline, resume it
-        if (wasAudioPlaying && currentAudio) {
-            currentAudio.play();
-            currentAudio.isPlaying = true;
+        if (wasAudioPlaying && currentAudioPlaying && currentAudioPlaying.audio) {
+            currentAudioPlaying.audio.pause();
+            currentAudioPlaying.isPlaying = true;
             wasAudioPlaying = false;  // Reset the state
         }
+
+        window.location.href = "index.html";
     }
 
     // Listen for the online/offline events
@@ -1524,7 +1530,7 @@ document.addEventListener("DOMContentLoaded", () => {
         minisongTitle.innerHTML = `<p>${index}.${song.songKeyWord}</p>`;
         toggleClassList(miniMenu, "active", true);
 
-        document.title = index + " " + song.songName;
+        document.title = index + ".  " + song.songName;
 
         const audio = new Audio(song.songUrl);
 
@@ -1594,6 +1600,8 @@ document.addEventListener("DOMContentLoaded", () => {
             updatePlaybuttons(true);
             toggleClassList(confirmationOverlay, "active", false);
             toggleClassList(loadingoverlay, "active", false);
+
+            document.title = songFromUrl.index + ".  " + song.songName;
         });
 
         currentAudioPlaying.audio.addEventListener('timeupdate', () => {
@@ -1605,7 +1613,11 @@ document.addEventListener("DOMContentLoaded", () => {
             updatePlaybuttons(false);
             toggleClassList(loadingoverlay, "active", true);
 
-            const allSongEl = songsContainer.querySelectorAll('li');
+            document.title = "Error Playing Song";
+
+            const  message = `The song ${song ? song.songName : ""} isn't available. Can we Play next`;
+            const callback = () => {
+                const allSongEl = songsContainer.querySelectorAll('li');
                 if(songFromUrl && songFromUrl.index){
                     const ind = songFromUrl.index;
 
@@ -1617,18 +1629,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         toggleNextorPrev(rdir);
                     }
                 }
+            }
+
+            inquireAction(message, callback);
         });
 
         currentAudioPlaying.audio.addEventListener('waiting', () => {
             currentAudioPlaying.isPlaying = false;
             updatePlaybuttons(false);
             toggleClassList(loadingoverlay, "active", true);
+            document.title = "Just a moment...";
         });
 
         currentAudioPlaying.audio.addEventListener('stalled', () => {
             currentAudioPlaying.isPlaying = false;
             updatePlaybuttons(false);
             toggleClassList(loadingoverlay, "active", true);
+            document.title = "Just a moment...";
         });
 
         currentAudioPlaying.audio.addEventListener('ended', () => {
@@ -1637,6 +1654,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updatePlaybuttons(false);
             toggleClassList(loadingoverlay, "active", false);
             const isLooping = currentAudioPlaying.audio.loop;
+            document.title = "AllegroVastum - Curated Music Collection | Personal Music Sanctuary";
 
             if(!isLooping){
                 const allSongEl = songsContainer.querySelectorAll('li');
