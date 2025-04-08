@@ -2416,26 +2416,39 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
-    // 2. Declare a variable to hold the event before it's used
+    
     let deferredPrompt;
 
-   // 4. Add event listener to the install button
-    installButton.onclick = function () {
-        // Hide the install button after the user clicks it
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (event) => {
+        // Prevent the default behavior of the prompt
+        event.preventDefault();
+        
+        // Save the event to trigger it later
+        deferredPrompt = event;
+        
+        // Make the install button visible
+        installButton.style.display = 'block';
+    });
     
+    // Add event listener to the install button
+    installButton.onclick = function () {
         // Show the installation prompt
         deferredPrompt.prompt();
-    
+        
         // Wait for the user's response to the prompt
         deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-        } else {
-            console.log('User dismissed the A2HS prompt');
-        }
-    
-        // Reset the deferred prompt variable
-        deferredPrompt = null;
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+            } else {
+                console.log('User dismissed the A2HS prompt');
+            }
+        
+            // Reset the deferred prompt variable
+            deferredPrompt = null;
+        
+            // Hide the install button
+            installButton.style.display = 'none';
         });
     };
 
