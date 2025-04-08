@@ -2427,8 +2427,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Save the event to trigger it later
         deferredPrompt = event;
         
-        // Make the install button visible
-        installButton.style.display = 'block';
     });
     
     // Add event listener to the install button
@@ -2447,8 +2445,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Reset the deferred prompt variable
             deferredPrompt = null;
         
-            // Hide the install button
-            installButton.style.display = 'none';
+            
+            
         });
     };
 
