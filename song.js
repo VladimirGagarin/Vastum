@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const shareOverlay = document.querySelector(".sharing-overlay");
     const shareExit = document.querySelector(".share-exit");
-    const shareDone = document.querySelector(".share-done");
     const  sharingDiv = document.querySelector(".sharing-overlay .sharing-content .sharing-icons");
 
     const pageLoadElement = document.querySelector('.page-load');
@@ -934,6 +933,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     pid: crypto.randomUUID(),
                     pImg: moodObj.img,
                     system: true,
+                    tooltip: moodObj.description
                 };
                 
                 
@@ -984,6 +984,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 pid: localStorage.getItem('likedSongsPid') || crypto.randomUUID(),
                 pImg: "logo.png",
                 system: true,
+                tooltip: "Songs you love belong on your shelf"
             };
 
             // Save the LikedSongs pid to localStorage
@@ -1017,7 +1018,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
     
-
+    function showBottomTooltip(message) {
+        const bottomTooltip = document.createElement("div");
+        bottomTooltip.className = "bottom-tooltip";
+        bottomTooltip.innerHTML = `<span>${message}</span>`;
+    
+        document.body.appendChild(bottomTooltip);
+    
+        // Trigger animation and auto-remove
+        setTimeout(() => {
+            bottomTooltip.classList.add("visible");
+        }, 10);
+    
+        setTimeout(() => {
+            bottomTooltip.classList.remove("visible");
+            setTimeout(() => {
+                bottomTooltip.remove();
+            }, 300); // Allow fade-out animation to finish
+        }, 3000);
+    }
+    
 
     function displaySongs(song,i) {
         
@@ -1125,9 +1145,24 @@ document.addEventListener("DOMContentLoaded", () => {
         function showplaylistMenu() {
             playlistPatContainer.innerHTML = '';
         
+            const nonSystemPlaylists = userplayList.filter(p => !p.system);
+
+                if (nonSystemPlaylists.length === 0) {
+                    toggleClassList(playlistPlatformOverlay, "active", false);
+        
+                   const  message = "Your playlist shelf is empty for now. Shall we create your first one together?";
+                   const callback = () => createUserPlaylist();
+
+                   inquireAction(message, callback);
+                    return;
+                }
+
+                
             userplayList.forEach(p => {
                 if(p.system) return;
-        
+                
+                
+
                 const newLi = document.createElement('li');
                 newLi.setAttribute("data-playlist-label", p.pid);
         
@@ -1245,7 +1280,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const songImg = getAlbumImage(song);
             const songId = song.songId;
         
-            const shareLink = `${window.location.origin}/share/?sid=${encodeURIComponent(songId)}`;
+        
+            const currentPath = window.location.pathname;
+
+            // Create the shareable link by appending the sid parameter, ensuring only one slash between path segments
+            const shareLink = `${window.location.origin}${currentPath.replace(/\/$/, '')}/share/?sid=${encodeURIComponent(songId)}`;
+
+          
+
 
         
             sharingDiv.innerHTML = ''; // Clear previous content
@@ -1294,6 +1336,47 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         
+        let observer;
+
+        function setupObserver() {
+            if (observer) observer.disconnect(); // cleanup existing observer
+        
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const text = entry.target.dataset.songName;
+                        showBottomTooltip(text);
+                    }
+                });
+            }, { root: null, threshold: 0.8 });
+        
+            const allSongEl = songsContainer.querySelectorAll('li');
+        
+            allSongEl.forEach(li => {
+                const liSongId = li.getAttribute('data-song-label');
+                const lisong = mysongs.find(s => s.songId === liSongId);
+                if (lisong) {
+                    li.dataset.songName = `${lisong.songName} - ${lisong.songArtist1} ${lisong.songArtist2 ? " & " + lisong.songArtist2 : ""}`;
+                }
+                observer.observe(li);
+            });
+        }
+        
+        function handleResize() {
+            if (window.innerWidth < 768) {
+                setupObserver();
+            } else if (observer) {
+                observer.disconnect(); // remove observer on wider screens
+            }
+        }
+        
+        // Initial run
+        if (window.innerWidth < 768) {
+            setupObserver();
+        }
+        
+        // Listen to window resize
+        window.addEventListener('resize', handleResize);
             
     }
 
@@ -1325,6 +1408,25 @@ document.addEventListener("DOMContentLoaded", () => {
              </div>`;
      
          playListContainer.appendChild(newLi);
+
+         if(p.tooltip){
+            newLi.onmouseenter = (e) => {
+                tooltipDiv(p.tooltip, e, true)
+            }
+
+            newLi.onmouseover = (e) => {
+                tooltipDiv(p.tooltip, e, true)
+            }
+            newLi.onmouseleave = (e) => {
+                tooltipDiv("", e , false);
+            }
+            newLi.onmousemove = (e) => {
+                tooltipDiv(p.tooltip, e, true)
+            }
+            newLi.onmouseout = (e) => {
+                tooltipDiv("", e , false);
+            }
+         }
              
          newLi.onclick = () => {
 
@@ -1336,15 +1438,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
         
             ShowCurrentSection(3);
-            const allSongs = mysongs.filter(s => p.songIds.includes(s.songId)); // ✅ Use songId
-
-                 // Filter songs by songId from the playlist
-            const filteredSongs = mysongs.filter(song => p.songIds.includes(song.songId));
-            console.log("Clicked playlist:", p.name);
-            console.log("Playlist Song IDs:", p.songIds);
-            console.log("All Songs in mysongs:", mysongs.map(song => song.songId)); // Log all songIds in mysongs
-            console.log('Filtered songs:', filteredSongs); // Log filtered songs
-    
+            const allSongs = mysongs.filter(s => p.songIds.includes(s.songId)); // ✅ Use songId 
                 getCurrentplaylist(p, allSongs, 1);
         };
         
@@ -2263,7 +2357,16 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleClassList(refreshOverlay, "active", false);
             sessionStorage.removeItem("songBatches");
             createSessionSongBatches();
-            refreshSongBatches();
+            const firstSongId = songBatches[0];
+            const song = mysongs.find(s => s.songId === firstSongId);
+
+            if(song){
+                songFromUrl.sid = song.songId;
+                songFromUrl.index = 1;
+                handleSongDetails(songFromUrl.sid, songFromUrl.index);
+            }
+
+            window.location.reload();
         }
 
 
@@ -2296,5 +2399,7 @@ document.addEventListener("DOMContentLoaded", () => {
         deferredPrompt = null;
         });
     };
+
+   
 
 })
