@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('service-worker.js')  // Ensure the correct path
+          navigator.serviceWorker.register('./service-worker.js')  // Ensure the correct path
             .then(registration => {
               console.log('Service Worker registered:', registration);
             })
