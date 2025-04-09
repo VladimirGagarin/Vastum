@@ -1,76 +1,129 @@
-// Function to fetch the cached audio data (from audio.json)
-function fetchAudioData() {
-    if ('caches' in window) {
-        caches.match('./audio.json').then(function(response) {
-            if (!response) {
-                console.log("No cached audio data available.");
-                showNoAudioFallback();  // Show fallback message or placeholder
-                return;
-            }
-            response.json().then(function(data) {
-                if (data && data.length > 0) {
-                    displayAudioFiles(data); // Display cached audio files
-                } else {
-                    console.log("No audio data available.");
-                    showNoAudioFallback();  // Show fallback message or placeholder
-                }
+document.addEventListener("DOMContentLoaded", () => {
+    const Allfavs = document.querySelectorAll(".favs-songs .fav");
+    const CACHE_NAME = "allegrovastum-v1";
+
+    let currentPlaying = {
+        audio: null,
+        isPlaying: false,
+        src: null,
+        icon: null,
+    };
+
+    if ("caches" in window) {
+        Allfavs.forEach(fav => {
+            const playBtn = fav.querySelector('.btn');
+            const bar = fav.querySelector('.favs-songs .fav .progress-truck .bar')
+            const dataSrc = fav.getAttribute('data-src');
+            const cacheKey = "/" + encodeURI(dataSrc); // Ensures spaces become %20
+
+            caches.open(CACHE_NAME).then(cache => {
+                cache.match(cacheKey).then(response => {
+                    if (response) {
+                        playBtn.addEventListener('click', () => {
+
+                            Allfavs.forEach(fav => { 
+                                const playBtn = fav.querySelector('.btn');
+                                const bar = fav.querySelector('.favs-songs .fav .progress-truck .bar')
+                                playBtn.innerHTML =' &#9654;';
+                                playBtn.classList.toggle("playing", false);
+                                bar.style.width = 0;
+                            });
+
+                            if(currentPlaying && currentPlaying.audio && currentPlaying.icon === playBtn){
+                                if (currentPlaying.isPlaying) {
+                                    currentPlaying.audio.pause();
+                                    currentPlaying.isPlaying = false;
+                                    playBtn.innerHTML = '&#9654;';
+                                } else {
+                                    currentPlaying.audio.play();
+                                    currentPlaying.isPlaying = true;
+                                    playBtn.innerHTML = '&#10074;&#10074;';
+                                }
+
+
+                                currentPlaying.audio.addEventListener('timeupdate', () => {
+                                    const  percent = (currentPlaying.audio.currentTime / currentPlaying.audio.duration) * 100;
+                        
+                                    bar.style.width = `${percent}%`;
+                                });
+
+                            }
+
+                            else{
+                                response.blob().then(blob => {
+                                    playAscurrentSong(blob, dataSrc, playBtn, bar);
+                                }).catch(error => {
+                                    console.error('Error reading the blob:', error);
+                                    Allfavs.forEach(fav => { 
+                                        const playBtn = fav.querySelector('.btn');
+                                        const bar = fav.querySelector('.favs-songs .fav .progress-truck .bar')
+                                        playBtn.innerHTML =' &#9654;';
+                                        playBtn.classList.toggle("playing", false);
+                                        bar.style.width = 0;
+                                    });
+                                });
+                            }
+
+                            if(currentPlaying && currentPlaying.audio){
+                                playBtn.classList.toggle("playing",currentPlaying.isPlaying);
+                            }
+
+                        });
+                    } else {
+                        console.warn(`No matching cache entry found for ${dataSrc}`);
+                    }
+                }).catch(error => {
+                    console.error(`Error matching cache for ${dataSrc}:`, error);
+                });
+            }).catch(error => {
+                console.error("Error opening cache:", error);
             });
-        }).catch(function(error) {
-            console.error("Error fetching audio data:", error);
-            showNoAudioFallback();  // Show fallback message or placeholder
         });
     }
-}
 
-// Function to display a message or fallback UI when no audio is available
-function showNoAudioFallback() {
-    const audioListContainer = document.getElementById('audio-list');
-    const noAudioMessage = document.createElement('div');
-    noAudioMessage.classList.add('no-audio-message');
-    noAudioMessage.innerHTML = `<p>No audio files available. Please check back later.</p>`;
-    audioListContainer.appendChild(noAudioMessage);
-}
-
-// Function to display the audio files and create a player for each
-function displayAudioFiles(audioData) {
-    const audioListContainer = document.getElementById('audio-list');
-    
-    // Clear previous content if any
-    audioListContainer.innerHTML = '';
-
-    // Loop through each audio data entry and create a player
-    audioData.forEach(function(audio) {
-        const audioElement = document.createElement('div');
-        audioElement.classList.add('audio-item');
-
-        // Create audio player
-        const audioPlayer = document.createElement('audio');
-        audioPlayer.setAttribute('controls', 'true');
-        const audioSource = document.createElement('source');
+    function playAscurrentSong(blob, src, btn , bar) {
         
-        // Use songUrl directly since it already includes the path
-        audioSource.setAttribute('src', audio.songUrl);
-        audioSource.setAttribute('type', 'audio/mp3'); // Ensure the type matches your audio format
-        audioPlayer.appendChild(audioSource);
+        if (currentPlaying.audio) {
+            currentPlaying.audio.pause();
+            currentPlaying.isPlaying = false;
+            currentPlaying.icon.innerHTML = '&#9654;'; // Reset to play icon for the previous song
+        }
 
-        // Add metadata like song name, artist, genre, etc.
-        const songDetails = document.createElement('div');
-        songDetails.classList.add('song-details');
-        songDetails.innerHTML = `
-            <strong>${audio.songName}</strong><br>
-            Artist: ${audio.songArtist1} ${audio.songArtist2 ? audio.songArtist2 : ""}<br>
-            Genre: ${audio.songGenre}<br>
-            Mood: ${audio.songMood.join(", ")}
-        `;
+        // Create a new audio URL for the selected song
+        const audioUrl = URL.createObjectURL(blob);
+        const audio = new Audio(audioUrl);
 
-        // Append the audio player and details to the container
-        audioElement.appendChild(audioPlayer);
-        audioElement.appendChild(songDetails);
-        audioListContainer.appendChild(audioElement);
-    });
-}
+        // When the song ends, reset play button to pause
+        audio.addEventListener('ended', () => {
+            btn.innerHTML = '&#9654;';
+            btn.classList.remove("playing");
+            currentPlaying.isPlaying = false;
+        });
 
-// Fetch and display audio files when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    fetchAudioData();
+        // Assign the audio and icon for the current song
+        currentPlaying.audio = audio;
+        currentPlaying.src = src;
+        currentPlaying.isPlaying = true;
+        currentPlaying.icon = btn;
+        currentPlaying.icon.innerHTML = '&#10074;&#10074;'; // Play icon
+        audio.play().catch(error => {
+            console.error("Error playing audio:", error);
+            currentPlaying.icon.innerHTML = '&#9654;';
+        });
+
+
+        if(currentPlaying && currentPlaying.audio){
+            btn.classList.toggle("playing", currentPlaying.isPlaying);
+        }
+
+
+        currentPlaying.audio.addEventListener('timeupdate', () => {
+            const  percent = (currentPlaying.audio.currentTime / currentPlaying.audio.duration) * 100;
+
+            bar.style.width = `${percent}%`;
+        });
+    }
+
+    
+
 });
