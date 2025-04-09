@@ -1,31 +1,45 @@
 const CACHE_NAME = "allegrovastum-v1";
+
 const STATIC_FILES = [
-  "/",
+  "/", 
   "/index.html",
   "/style.css",
   "/script.js",
-  "/audio.json", // Ensure audio.json is cached
+  "/audio.json",
   "/manifest.json",
   "/offline/index.html",
+  "/offline/style.css",
+  "/offline/offline.js",
+  "/share/index.html",
+  "/share/style.css",
+  "/share/share.js",
+  "/cantabile/Two Steps From Hell, Thomas Bergersen - Never Give Up On Your Dreams (Live).mp3",
+  "/cantabile/y2mate.com - Thomas Bergersen  Creation of Earth Sun.mp3",
+  "/cantabile/y2mate.com - Thomas Bergersen  Colors of Love Sun.mp3",
+  "/cantabile/thomas-bergersen-new-life-sun-128-ytshorts.savetube.me.mp3",
+  "/cantabile/y2mate.com - Thomas Bergersen  Always Mine Sun.mp3",
+  "/cantabile/two-steps-from-hell-protectors-of-the-earth-128-ytshorts.savetube.me.mp3"
+
+
 ];
 
-// Files to cache on install (static files that don’t change often)
+// Install event - pre-cache everything listed in STATIC_FILES
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_FILES); // Cache all static files
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(STATIC_FILES);
     })
   );
 });
 
-// Clean up old caches during activation
+// Activate event - clear old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keyList) =>
       Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
-            return caches.delete(key); // Delete outdated caches
+            return caches.delete(key);
           }
         })
       )
@@ -34,32 +48,19 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Handle fetch events for audio and other resources
+// Fetch event - respond from cache, fallback to offline page if failed
 self.addEventListener("fetch", (event) => {
-  if (event.request.url.includes("/cantabile/") || event.request.url.includes("/images/")) {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        return (
-          cachedResponse ||
-          fetch(event.request).then((response) => {
-            return caches.open(CACHE_NAME).then((cache) => {
-              // Cache the fetched response
-              cache.put(event.request, response.clone());
-              return response;
-            });
-          })
-        );
-      })
-    );
-  } else {
-    // Handle static files like HTML, CSS, JS from cache
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return (
-          response ||
-          fetch(event.request).catch(() => caches.match('/offline/index.html')) // Show offline page if network fails
-        );
-      })
-    );
-  }
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return (
+        response ||
+        fetch(event.request).catch(() => {
+          // Show offline fallback for navigation requests only
+          if (event.request.mode === "navigate") {
+            return caches.match("/offline/index.html");
+          }
+        })
+      );
+    })
+  );
 });
