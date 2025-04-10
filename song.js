@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let togglePlaylist = false;
+    let activeTooltip = null;  // Track the currently displayed tooltip
 
     let storedLoopState = JSON.parse(sessionStorage.getItem("audioLoop")) || { lpid: null, looped: "false" };
 
@@ -258,6 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
             createSessionSongBatches();
             createPlaylistBatches();
             scanUrl();
+            localStorage.setItem('CACHE_NAME', "allegrovastum-v1");
             setTimeout(() => {toggleClassList(pageLoadElement, "loaded" ,true)}, 6000)
         }).catch((err) => {
             console.error(err);
@@ -289,6 +291,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+    const tooltip = document.createElement("div");
+    tooltip.classList.add("tooltip-text");
+    tooltip.style.position = 'fixed';
+    tooltip.style.visibility = 'hidden'; // Initially hidden but still takes space in the layout
+    tooltip.style.pointerEvents = 'none'; // Prevent the tooltip from interfering with mouse events
+    document.body.appendChild(tooltip);
+
     
 
     function ShowCurrentSection(index) {
@@ -302,6 +311,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const sectionId = currentSection.id;
 
         document.title = "AllegroVastum - Curated Music Collection | Personal Music Sanctuary";
+
+        if(tooltip){
+            tooltip.style.visibility = 'hidden';
+        }
 
         navLinks.forEach(nav => {
             const navId = nav.getAttribute('data-match');
@@ -444,21 +457,17 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     // Create tooltip once
-    const tooltip = document.createElement("div");
-    tooltip.classList.add("tooltip-text");
-    tooltip.style.position = 'fixed';
-    tooltip.style.display = 'none'; // hide initially
-    document.body.appendChild(tooltip);
-
-    // Reusable function
+   
+    
+    // Reusable function to manage tooltip
     const tooltipDiv = (text, event, state) => {
         if (state) {
             tooltip.innerHTML = `<p>${text}</p>`;
             tooltip.style.left = `${event.clientX + 15}px`;
             tooltip.style.top = `${event.clientY - 25}px`;
-            tooltip.style.display = 'block';
+            tooltip.style.visibility = 'visible'; // Show the tooltip
         } else {
-            tooltip.style.display = 'none';
+            tooltip.style.visibility = 'hidden'; // Hide the tooltip with visibility
         }
     };
 
@@ -519,6 +528,8 @@ document.addEventListener("DOMContentLoaded", () => {
             currentAudio.isPlaying = false;
         }
 
+        showBottomTooltip("You are offline");
+
         // Redirect to offline page
         window.location.href = 'offline/';
     }
@@ -532,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
             wasAudioPlaying = false;  // Reset the state
         }
 
-        window.location.href = "index.html";
+        showBottomTooltip("Connection was  restored");
     }
 
     // Listen for the online/offline events
@@ -1064,24 +1075,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
     
+   
+
     function showBottomTooltip(message) {
+        // If there's already an active tooltip, remove it immediately
+        if (activeTooltip) {
+            activeTooltip.remove();
+            activeTooltip = null; // Reset the active tooltip tracker
+        }
+
         const bottomTooltip = document.createElement("div");
         bottomTooltip.className = "bottom-tooltip";
         bottomTooltip.innerHTML = `<span>${message}</span>`;
-    
+
         document.body.appendChild(bottomTooltip);
-    
+
         // Trigger animation and auto-remove
         setTimeout(() => {
             bottomTooltip.classList.add("visible");
         }, 10);
-    
+
         setTimeout(() => {
             bottomTooltip.classList.remove("visible");
             setTimeout(() => {
                 bottomTooltip.remove();
             }, 300); // Allow fade-out animation to finish
         }, 3000);
+
+        // Set this tooltip as the active one
+        activeTooltip = bottomTooltip;
     }
     
 
@@ -1166,20 +1188,35 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        newLi.onmouseover = (e) => {
-            const text = `${song.songName} - ${song.songArtist1} ${song.songArtist2 ? " & " + song.songArtist2 : ""}`;
-            tooltipDiv(text, e , true);
+        function handleTooltipOnLargeScreens() {
+            if (window.innerWidth > 800) {
+                newLi.onmouseover = (e) => {
+                    const text = `${song.songName} - ${song.songArtist1} ${song.songArtist2 ? " & " + song.songArtist2 : ""}`;
+                    tooltipDiv(text, e , true);
+                }
+                newLi.onmouseleave = (e) => {
+                    tooltipDiv("", e , false);
+                }
+                newLi.onmousemove = (e) => {
+                    const text = `${song.songName} - ${song.songArtist1}  ${song.songArtist2 ? " & " + song.songArtist2 : ""}`;
+                    tooltipDiv(text, e , true);
+                }
+                newLi.onmouseout = (e) => {
+                    tooltipDiv("", e , false);
+                }
+            } else {
+                // Optionally, clean up events for small screens (if needed)
+                newLi.onmouseover = null;
+                newLi.onmouseleave = null;
+                newLi.onmousemove = null;
+                newLi.onmouseout = null;
+            }
         }
-        newLi.onmouseleave = (e) => {
-            tooltipDiv("", e , false);
-        }
-        newLi.onmousemove = (e) => {
-            const text = `${song.songName} - ${song.songArtist1}  ${song.songArtist2 ? " & " + song.songArtist2 : ""}`;
-            tooltipDiv(text, e , true);
-        }
-        newLi.onmouseout = (e) => {
-            tooltipDiv("", e , false);
-        }
+        
+        // Initial check for large screens
+        handleTooltipOnLargeScreens();
+        
+       
 
         newLi.oncontextmenu = (e) => {
             e.preventDefault();
@@ -1329,7 +1366,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const currentPath = window.location.pathname;
 
             // Create the shareable link by appending the sid parameter, ensuring only one slash between path segments
-            const shareLink = `${window.location.origin}${currentPath.replace(/\/$/, '')}/share/?sid=${encodeURIComponent(songId)}`;
+            const shareLink = `${window.location.origin}${currentPath.replace(/\/$/, '')}/share/?sid=${encodeURIComponent(songId)}&name=${encodeURIComponent(songName)}`;
 
           
 
@@ -1420,8 +1457,16 @@ document.addEventListener("DOMContentLoaded", () => {
             setupObserver();
         }
         
-        // Listen to window resize
-        window.addEventListener('resize', handleResize);
+        // Combine both resize functions into one handler
+        function handleWindowResize() {
+            handleResize();  // Call your existing resize handler
+            handleTooltipOnLargeScreens();  // Call your tooltip-specific resize handler
+        }
+
+        // Listen to window resize with a single event listener
+        window.addEventListener('resize', handleWindowResize);
+
+        
             
     }
 
@@ -2372,26 +2417,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const sect = document.querySelector("#QueuedSongs");
         const userPreferColor = getComputedStyle(document.documentElement).getPropertyValue('--user-prefer-color').trim();
         const selectedColor = userPreferColor === "dark" ? darkColors : xlrs;
-        
-        // Set the background color as a fallback
-        sect.style.backgroundColor = selectedColor[index];
-        
-        // Set the background image and apply the fallback color in case image fails to load
-        const imgFallback = new Image();
-        imgFallback.src = img;
-        
-        imgFallback.onload = () => {
-            // If the image loads successfully, set it as the background image
-            sect.style.backgroundImage = `url(${img})`;
-        };
     
-        imgFallback.onerror = () => {
-            // If image fails to load, remove the background-image (it will show the background color)
-            sect.style.backgroundImage = "";
-
+        // Check screen size
+        if (window.innerWidth > 800) {
+            // On larger screens, use background image
+            const imgFallback = new Image();
+            imgFallback.src = img;
+    
+            imgFallback.onload = () => {
+                // If the image loads successfully, set it as the background image
+                sect.style.backgroundImage = `url(${img})`;
+                sect.style.backgroundColor = ""; // Remove background color
+            };
+    
+            imgFallback.onerror = () => {
+                // If image fails to load, remove the background-image (it will show the background color)
+                sect.style.backgroundImage = "";
+                sect.style.backgroundColor = selectedColor[index];
+            };
+        } else {
+            // For smaller screens, use background color based on user preference
+            sect.style.backgroundImage = ""; // Remove background image
             sect.style.backgroundColor = selectedColor[index];
-        };
+        }
     }
+    
     
 
     function showFiltersOptions() {
@@ -2454,6 +2504,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
         // Add event listener to the install button
         installButton.onclick = function () {
+
+            installButton.disabled = true;
             // Show the installation prompt
             deferredPrompt.prompt();
             
@@ -2469,6 +2521,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 deferredPrompt = null;
             
                 
+                setTimeout(() => { installButton.disabled = false;}, 3000)
                 
             });
         };
