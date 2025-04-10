@@ -18,7 +18,11 @@ const STATIC_FILES = [
   "/cantabile/y2mate.com - Thomas Bergersen  Colors of Love Sun.mp3",
   "/cantabile/thomas-bergersen-new-life-sun-128-ytshorts.savetube.me.mp3",
   "/cantabile/y2mate.com - Thomas Bergersen  Always Mine Sun.mp3",
-  "/cantabile/two-steps-from-hell-protectors-of-the-earth-128-ytshorts.savetube.me.mp3"
+  "/cantabile/two-steps-from-hell-protectors-of-the-earth-128-ytshorts.savetube.me.mp3",
+  "cantabile/y2mate.com - Two Steps From Hell  Strength of a Thousand Men Archangel.mp3",
+  "cantabile/y2mate.com - Two Steps From Hell Victory.mp3",
+  "cantabile/y2mate.com - Two Steps From Hell  Never Back Down.mp3",
+  "cantabile/y2mate.com - Thomas Bergersen  Homecoming.mp3"
 
 
 ];
