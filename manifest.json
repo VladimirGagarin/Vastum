@@ -2,7 +2,7 @@
     "name": "AllegroVastum",
     "short_name": "AllegroVastum",
     "description": "A personal sanctuary where music transcends bounds of eternity.",
-    "start_url": "https://vladimirgagarin.github.io/Vastum/",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#800200", 
     "theme_color": "#f9f9f9", 
