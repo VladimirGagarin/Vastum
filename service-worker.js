@@ -1,7 +1,7 @@
 const CACHE_NAME = "allegrovastum-v1";
 
 const STATIC_FILES = [
-  "https://vladimirgagarin.github.io/Vastum/", 
+  "./", 
   "./index.html",
   "./style.css",
   "./script.js",
@@ -61,7 +61,7 @@ self.addEventListener("fetch", (event) => {
         fetch(event.request).catch(() => {
           // Show offline fallback for navigation requests only
           if (event.request.mode === "navigate") {
-            return caches.match("/offline/index.html");
+            return caches.match("./offline/index.html");
           }
         })
       );
