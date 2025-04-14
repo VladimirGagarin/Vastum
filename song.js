@@ -531,7 +531,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showBottomTooltip("You are offline");
 
         // Redirect to offline page
-        window.location.href = 'offline/';
+        window.location.href = './offline/';
     }
 
     // Check when the user goes back online
