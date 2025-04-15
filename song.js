@@ -1494,7 +1494,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
              </div>
              <div class="song-detail">
-              <span>Playlist ( ${p.songIds.length} songs )</span>
+              <span>Playlist ( ${p.songIds?.length} songs )</span>
              </div>`;
      
          playListContainer.appendChild(newLi);
