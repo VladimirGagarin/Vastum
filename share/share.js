@@ -146,9 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displaySong() {
         if (songFound.song) {
-            console.log('Song found:', songFound.song);
+           
             const albumTextAndImage = getAlbumImageAndText(songFound.song);
-            console.log(albumTextAndImage);
+            
             playerImage.src = `../${albumTextAndImage.image}`;
             playerTitle.innerText = songFound.song.songName;
             playerArtist.innerText =`${ songFound.song.songArtist1} ${songFound.song.songArtist2 ? `& ${songFound.song.songArtist2}` : ''}`;
@@ -359,6 +359,8 @@ playerDownloadBtn.onclick = function() {
                 const filename = "AllegroVastum_" + baseName + ".mp3";
                 const a = document.createElement('a');
                 a.href = audioUrl;
+                a.rel = "noopener noreferrer";
+
                 a.download = filename;
                 document.body.appendChild(a);
                 a.click();
