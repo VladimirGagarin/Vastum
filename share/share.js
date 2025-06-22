@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const playerPlayBtn = playerContainer.querySelectorAll('.player .player-controls button')[0];
     const  playerMuteBtn = playerContainer.querySelectorAll('.player .player-controls button')[1];
     const playerLoopBtn = playerContainer.querySelectorAll('.player .player-controls button')[2];
+    const playerDownloadBtn = playerContainer.querySelectorAll('.player .player-controls button')[3];
 
     const homeInPlainBtn = document.querySelectorAll('.home-buttons button')[0];
     const homeWithIDBtn = document.querySelectorAll('.home-buttons button')[1];
@@ -266,6 +267,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 playerLoopBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i>'; // Unicode for repeat symbol
                 songFound.isLooping = false;
             }
+        }
+    }
+
+    playerDownloadBtn.onclick = function() {
+        if (songFound && songFound.song && songFound.song.songUrl) {
+            // Construct the song URL (relative to current page)
+            const audioUrl = `../${songFound.song.songUrl}`;
+            // Use the song name for the filename, fallback to "download.mp3"
+            const filename = (songFound.song.songName ? songFound.song.songName.replace(/[\\/:*?"<>|]/g, '') : "download") + ".mp3";
+            const a = document.createElement('a');
+            a.href = audioUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     }
 
