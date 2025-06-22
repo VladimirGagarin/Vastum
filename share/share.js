@@ -270,20 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    playerDownloadBtn.onclick = function() {
-        if (songFound && songFound.song && songFound.song.songUrl) {
-            // Construct the song URL (relative to current page)
-            const audioUrl = `../${songFound.song.songUrl}`;
-            // Use the song name for the filename, fallback to "download.mp3"
-            const filename = (songFound.song.songName ? songFound.song.songName.replace(/[\\/:*?"<>|]/g, '') : "download") + ".mp3";
-            const a = document.createElement('a');
-            a.href = audioUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-    }
+    
 
     playerProgressBar.parentElement.onclick = function(event) {
         const rect = playerProgressBar.parentElement.getBoundingClientRect();
@@ -292,6 +279,108 @@ document.addEventListener('DOMContentLoaded', function() {
         const percentage = offsetX / totalWidth;
         songFound.audio.currentTime = percentage * songFound.audio.duration;
     }
+
+    // ... (the rest of your existing code stays the same)
+
+playerDownloadBtn.onclick = function() {
+    if (songFound && songFound.song && songFound.song.songUrl) {
+        // Create overlay for password prompt
+        let overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.5)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = 9999;
+
+        let promptBox = document.createElement('div');
+        promptBox.style.background = 'white';
+        promptBox.style.padding = '2rem';
+        promptBox.style.borderRadius = '8px';
+        promptBox.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        promptBox.style.display = 'flex';
+        promptBox.style.flexDirection = 'column';
+        promptBox.style.alignItems = 'center';
+
+        let label = document.createElement('label');
+        label.textContent = "Enter password to download:";
+        label.style.marginBottom = '1rem';
+
+        let input = document.createElement('input');
+        input.type = 'password';
+        input.style.marginBottom = '1rem';
+        input.style.padding = '0.5rem';
+        input.style.width = '200px';
+
+        let errorMsg = document.createElement('div');
+        errorMsg.style.color = 'red';
+        errorMsg.style.marginBottom = '1rem';
+        errorMsg.style.display = 'none';
+
+        let button = document.createElement('button');
+        button.textContent = 'Download';
+        button.style.padding = '0.5rem 1rem';
+
+        let cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.style.marginLeft = '1rem';
+        cancelBtn.style.padding = '0.5rem 1rem';
+
+        let btnRow = document.createElement('div');
+        btnRow.style.display = 'flex';
+        btnRow.style.justifyContent = 'center';
+        btnRow.appendChild(button);
+        btnRow.appendChild(cancelBtn);
+
+        promptBox.appendChild(label);
+        promptBox.appendChild(input);
+        promptBox.appendChild(errorMsg);
+        promptBox.appendChild(btnRow);
+        overlay.appendChild(promptBox);
+        document.body.appendChild(overlay);
+
+        input.focus();
+
+        button.onclick = function() {
+            if (input.value === 'Lorem_Ipsum_Dolor_100') {
+                // Remove overlay
+                document.body.removeChild(overlay);
+
+                // Download logic
+                const audioUrl = `../${songFound.song.songUrl}`;
+                // Start filename with AllegroVastum_
+                const baseName = songFound.song.songName ? songFound.song.songName.replace(/[\\/:*?"<>|]/g, '') : "download";
+                const filename = "AllegroVastum_" + baseName + ".mp3";
+                const a = document.createElement('a');
+                a.href = audioUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                errorMsg.textContent = 'Incorrect password. Please try again.';
+                errorMsg.style.display = 'block';
+                input.value = '';
+                input.focus();
+            }
+        };
+
+        cancelBtn.onclick = function() {
+            document.body.removeChild(overlay);
+        };
+
+        // Allow Enter key to submit
+        input.onkeydown = function(e) {
+            if (e.key === 'Enter') {
+                button.onclick();
+            }
+        };
+    }
+};
 
     homeInPlainBtn.onclick = function() {
         window.location.href = "../";  // This will take you to the parent directory
