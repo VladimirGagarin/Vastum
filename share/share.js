@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
 playerDownloadBtn.onclick = function() {
     if (songFound && songFound.song && songFound.song.songUrl) {
         // Create overlay for password prompt
+        alert("Download button works!");
         let overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
