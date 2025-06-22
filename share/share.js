@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const  playerMuteBtn = playerContainer.querySelectorAll('.player .player-controls button')[1];
     const playerLoopBtn = playerContainer.querySelectorAll('.player .player-controls button')[2];
     const playerDownloadBtn = playerContainer.querySelectorAll('.player .player-controls button')[3];
+    console.log("playerDownloadBtn:", playerDownloadBtn);
 
     const homeInPlainBtn = document.querySelectorAll('.home-buttons button')[0];
     const homeWithIDBtn = document.querySelectorAll('.home-buttons button')[1];
