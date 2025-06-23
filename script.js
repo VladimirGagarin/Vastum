@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "#Playlist .playlist-progress-truck .playlist-progres-bar"
     ),
     p = document.querySelector(".loading-overlay"),
-    
+    f = document.querySelector("footer button"),
     y = document.querySelectorAll("#Home .music-container ul")[0],
     h = document.querySelectorAll("#Home .music-container ul")[1],
     b = document.querySelector("#Home .music-headlines .filter-button"),
@@ -1757,5 +1757,22 @@ document.addEventListener("DOMContentLoaded", () => {
         Ne(D, "active", !1),
         Ze();
     }),
-    
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault(),
+          (Qe = e),
+         
+            (f.onclick = function () {
+            (f.disabled = !0),
+              Qe.prompt(),
+              Qe.userChoice.then((e) => {
+                "accepted" === e.outcome
+                  ? console.log("User accepted the A2HS prompt")
+                  : console.log("User dismissed the A2HS prompt"),
+                  (Qe = null),
+                  setTimeout(() => {
+                    f.disabled = !1;
+                  }, 3e3);
+              });
+        });
+    });
 });
