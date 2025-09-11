@@ -786,8 +786,39 @@
     "songArtist2": null, 
     "songMood": [ "Epic", "Nostalgic", "Fun", "Uplifting" ], 
     "songKeyWord": "SWM_Anthem_soft" 
+  },
+  {
+    "songName": "Alejandro",
+    "songUrl": "cantabile/Alejandro - Lady Gaga (Lyrics).mp3",
+    "songGenre": "RnB",
+    "songId": "3f8f9d0e-42b3-4a55-b4f9-1c72d7f5813f",
+    "songArtist1": "Lady Gaga",
+    "songArtist2": null,
+    "songMood": ["Dramatic", "Romantic", "Emotional", "Dark", "Longing"],
+    "songKeyWord": "Alejandro"
+  },
+  {
+    "songName": "Everywhere",
+    "songUrl": "cantabile/Michelle Branch - Everywhere [Official Music Video].mp3",
+    "songGenre": "RnB",
+    "songId": "88d729cf-7d35-4761-8b09-9c01e18c3db9",
+    "songArtist1": "Michelle Branch",
+    "songArtist2": null,
+    "songMood": ["Hopeful", "Romantic", "Dreamy", "Youthful", "Uplifting"],
+    "songKeyWord": "Everywhere"
+  },
+  {
+    "songName": "Right Here",
+    "songUrl": "cantabile/Juliana Kanyomozi - Right Here (Official Music Video).mp3",
+    "songGenre": "RnB",
+    "songId": "c7ef8022-4e2a-45bb-9414-9018496a9e3c",
+    "songArtist1": "Juliana Kanyomozi",
+    "songArtist2": null,
+    "songMood": ["Romantic", "Tender", "Emotional", "Calm", "Intimate"],
+    "songKeyWord": "Right Here"
   }
 ]
+
 
 
 
